@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicines | MedStore</title>
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="logo">🩺 MedStore</div>
+    <ul class="nav-links">
+        <li><a href="#">Home</a></li>
+        <li><a href="#" class="active">Medicines</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="/add_product">Add Product</a></li>
+
+    </ul>
+</nav>
+
+<!-- PAGE TITLE -->
+<section class="header">
+    <h1>Available Medicines</h1>
+    <p>Trusted medicines for your health & care</p>
+</section>
+
+<!-- MEDICINES GRID -->
+<div class="container">
+    {% for medcine in medicines %}
+    <div class="card">
+        <img src="{{ medcine.image.url }}" alt="{{ medcine.name }}">
+        <div class="card-body">
+            <h2>{{ medcine.name }}</h2>
+            <p class="desc">{{ medcine.description }}</p>
+            <div class="card-footer">
+                <span class="price">Rs:{{ medcine.price }}</span>
+                <button class="btn">Buy Now</button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+</body>
+</html>
