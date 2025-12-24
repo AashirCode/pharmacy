@@ -39,6 +39,9 @@
             <div class="card-footer">
                 <span class="price">Rs:{{ medcine.price }}</span>
                 <button class="btn">Buy Now</button>
+                <div class="btn">
+                    <a href="{% url 'update_prod' medcine.id  %}">update</a>
+                </div>
             </div>
         </div>
     </div>

@@ -1,0 +1,30 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Medicine</title>
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="form-wrapper">
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+    
+        <input type="text" name="m_name" placeholder="Medicine Name" required value="{{dawai.name}}">
+    
+        <input type="text" name="m_dec" placeholder="Description"value="{{dawai.description}}">
+    
+        <input type="number" name="m_price" placeholder="Price" requiredvalue="{{dawai.price}}">
+    
+        <input type="file" name="m_img"value="{{dawai.image}}">
+    
+        <button type="submit">Add Product</button>
+    </form>
+    
+</div>
+
+</body>
+</html>

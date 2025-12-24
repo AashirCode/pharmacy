@@ -24,5 +24,7 @@ from pharmacy import settings
 urlpatterns = [
     path('', views.home, name='home'),
     path('add_product/', views.add_prod, name='add_product'),
+    path('update_prod/<pk>', views.update_prod, name='update_prod'),
+
 ]
 
