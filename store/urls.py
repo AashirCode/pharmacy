@@ -22,9 +22,12 @@ from . import views
 from pharmacy import settings
 
 urlpatterns = [
+    path('register/', views.register, name='register'),
+
     path('', views.home, name='home'),
     path('add_product/', views.add_prod, name='add_product'),
     path('update_prod/<pk>', views.update_prod, name='update_prod'),
+    path('delete/<pk>', views.delete, name='delete'),
 
 ]
 

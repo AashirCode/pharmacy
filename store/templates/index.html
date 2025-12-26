@@ -18,7 +18,7 @@
         <li><a href="#" class="active">Medicines</a></li>
         <li><a href="#">About</a></li>
         <li><a href="/add_product">Add Product</a></li>
-
+        <li><a href="/register">Register</a></li>
     </ul>
 </nav>
 
@@ -38,9 +38,14 @@
             <p class="desc">{{ medcine.description }}</p>
             <div class="card-footer">
                 <span class="price">Rs:{{ medcine.price }}</span>
-                <button class="btn">Buy Now</button>
+                <!-- <button class="btn">Buy Now</button> -->
                 <div class="btn">
                     <a href="{% url 'update_prod' medcine.id  %}">update</a>
+                </div>
+                <div class="d-grid">
+                    <a href="{% url 'delete' medcine.id %}" class="btn btn-danger">
+                        <i class="fas fa-trash-alt me-2"></i> Deleted
+                    </a>
                 </div>
             </div>
         </div>
