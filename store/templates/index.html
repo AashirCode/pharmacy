@@ -18,7 +18,17 @@
         <li><a href="#" class="active">Medicines</a></li>
         <li><a href="#">About</a></li>
         <li><a href="/add_product">Add Product</a></li>
+        {% if user.is_authenticated %}
+        <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <p>{{ user.username }}</p>
+
+            <button type="submit">Logout</button>
+        </form>
+        {% else %}
         <li><a href="/register">Register</a></li>
+        <li><a href="{% url 'login' %}">Login</a></li>
+        {% endif %}
     </ul>
 </nav>
 
