@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Medicines
+from .models import *
 import os
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout
+from django.http import JsonResponse
+import json
 
 # Create your views here.
 def home(request):
@@ -71,3 +73,42 @@ def register(request):
 
     context = {'form': form}
     return render(request, 'registration/signup.html', context)
+
+def cart(request):
+    if request.user.is_authenticated:
+        customer = request.user
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        items = order.orderitem_set.all()
+    else:
+        items = []
+        order = {'get_cart_total': 0, 'get_cart_items': 0}
+
+    context = {'items': items, 'order': order}
+    return render(request, 'cart.html', context)
+
+
+
+def updateItem(request):
+    data = json.loads(request.body)
+    productId = data['productid']
+    action = data['action']
+    print('Action:', action)
+    print('Product:', productId)
+    
+    customer = request.user
+    product = Medicines.objects.get(id=productId)
+    
+    order, created = Order.objects.get_or_create(customer=customer, complete=False)
+    orderItem, created = OrderItem.objects.get_or_create(order=order, product=product)
+    
+    if action == 'add':
+        orderItem.quantity = (orderItem.quantity + 1)
+    elif action == 'remove':
+        orderItem.quantity = (orderItem.quantity - 1)
+    
+    orderItem.save()
+    
+    if orderItem.quantity <= 0:
+        orderItem.delete()
+    
+    return JsonResponse("item was added", safe=False)

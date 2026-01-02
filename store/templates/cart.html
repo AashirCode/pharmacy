@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart</title>
+    <!-- Add any stylesheets or scripts if needed -->
+</head>
+<body>
+    <h2>Your Cart</h2>
+
+    <table>
+        <tr>
+            <th><h5>Items: <strong>{{ order.get_cart_items }}</strong></h5></th>
+            <th><h5>Total: <strong>{{ order.get_cart_total }}</strong></h5></th>
+        </tr>
+        {% for item in items %}
+        <tr>
+            <td><p>{{ item.product.name }}</p></td>
+            <td><p>${{ item.product.price }}</p></td>
+            <td><p>{{ item.quantity }}</p></td>
+            <td><p>${{ item.get_total }}</p></td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
