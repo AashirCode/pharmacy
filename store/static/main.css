@@ -1,16 +1,3 @@
-/* ================== DESIGN TOKENS ================== */
-:root {
-    --blue: #2563eb;
-    --blue-dark: #1e40af;
-    --green: #16a34a;
-    --text: #111827;
-    --muted: #6b7280;
-    --bg: #f9fafb;
-    --white: #ffffff;
-    --border: #e5e7eb;
-}
-
-/* ================== RESET ================== */
 * {
     margin: 0;
     padding: 0;
@@ -19,158 +6,185 @@
 }
 
 body {
-    background: var(--bg);
-    color: var(--text);
+    background-color: #f4f7fb;
+    color: #333;
 }
 
-/* ================== NAVBAR ================== */
+/* ================= NAVBAR ================= */
+
 .navbar {
-    position: sticky;
-    top: 0;
-    z-index: 999;
-    background: var(--white);
+    background: #0a3d62;
+    padding: 15px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 18px 70px;
-    border-bottom: 1px solid var(--border);
 }
 
 .logo {
+    color: #fff;
     font-size: 22px;
     font-weight: 600;
-    color: var(--blue);
 }
 
 .nav-links {
-    display: flex;
     list-style: none;
-    gap: 40px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
 }
 
-.nav-links a {
+.nav-links a,
+.logout-btn {
+    color: #fff;
     text-decoration: none;
-    font-weight: 500;
-    color: var(--muted);
+    font-size: 15px;
+    padding: 6px 14px;
+    border-radius: 6px;
     transition: 0.3s;
+    border: none;
+    background: transparent;
+    cursor: pointer;
 }
 
-.nav-links a.active,
-.nav-links a:hover {
-    color: var(--blue);
+.nav-links a:hover,
+.logout-btn:hover,
+.nav-links a.active {
+    background: #1e90ff;
 }
 
-/* ================== HEADER ================== */
+/* ================= HEADER ================= */
+
 .header {
-    padding: 80px 20px 60px;
     text-align: center;
+    padding: 50px 20px;
+    background: linear-gradient(135deg, #1e90ff, #38ada9);
+    color: #fff;
 }
 
 .header h1 {
-    font-size: 42px;
-    font-weight: 600;
-    letter-spacing: -0.5px;
+    font-size: 36px;
+    margin-bottom: 10px;
 }
 
 .header p {
-    margin-top: 12px;
-    color: var(--muted);
     font-size: 16px;
+    opacity: 0.9;
 }
 
-/* ================== GRID ================== */
+/* ================= GRID ================= */
+
 .container {
-    max-width: 1300px;
-    margin: auto;
-    padding: 0 50px 100px;
+    max-width: 1200px;
+    margin: 40px auto;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 35px;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    padding: 0 20px;
 }
 
-/* ================== CARD ================== */
+/* ================= MEDICINE CARD ================= */
+
 .card {
-    background: var(--white);
-    border-radius: 22px;
+    background: #fff;
+    border-radius: 16px;
     overflow: hidden;
-    border: 1px solid var(--border);
-    transition: 0.35s ease;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
 }
 
 .card:hover {
-    transform: translateY(-12px);
-    box-shadow: 0 25px 60px rgba(0,0,0,0.12);
+    transform: translateY(-8px);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
 }
 
-/* ================== IMAGE ================== */
-.card img {
-    width: 100%;
+.card-img {
+    position: relative;
     height: 220px;
-    object-fit: contain;
-    padding: 22px;
-    background: linear-gradient(180deg, #f8fafc, #eef2ff);
+    background: #f1f3f6;
 }
 
-/* ================== CONTENT ================== */
+.card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 15px;
+}
+
+.price-tag {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: #1e90ff;
+    color: #fff;
+    padding: 6px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 20px;
+}
+
+/* ================= BODY ================= */
+
 .card-body {
-    padding: 20px 22px 24px;
+    padding: 18px 20px 20px;
+    flex: 1;
 }
 
 .card-body h2 {
     font-size: 18px;
-    font-weight: 600;
     margin-bottom: 8px;
+    color: #222;
 }
 
 .desc {
     font-size: 14px;
-    color: var(--muted);
-    line-height: 1.6;
-    margin-bottom: 22px;
+    color: #666;
+    margin-bottom: 18px;
+    line-height: 1.5;
 }
 
-/* ================== FOOTER ================== */
-.card-footer {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* ================= ACTION BUTTONS ================= */
+
+.card-actions {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
 }
 
-.price {
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--green);
-}
-
-/* ================== BUTTON ================== */
-.btn {
-    border: none;
-    padding: 10px 22px;
-    border-radius: 999px;
+.card-actions .btn {
+    padding: 9px;
     font-size: 14px;
-    font-weight: 500;
-    color: white;
-    cursor: pointer;
-    background: linear-gradient(135deg, var(--blue), var(--blue-dark));
-    transition: 0.3s;
+    border-radius: 10px;
+    text-align: center;
+    transition: 0.25s;
 }
 
-.btn:hover {
-    transform: scale(1.07);
-    box-shadow: 0 10px 25px rgba(37,99,235,0.45);
+.card-actions .btn:hover {
+    transform: scale(1.05);
 }
 
-/* ================== MOBILE ================== */
-@media (max-width: 768px) {
-    .navbar {
-        padding: 15px 25px;
+/* ================= MOBILE ================= */
+
+@media (max-width: 480px) {
+    .card-actions {
+        grid-template-columns: repeat(2, 1fr);
     }
+}
 
-    .container {
-        padding: 0 20px 80px;
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 600px) {
+    .navbar {
+        flex-direction: column;
+        gap: 10px;
     }
 
     .header h1 {
-        font-size: 32px;
+        font-size: 28px;
+    }
+
+    .btn-group {
+        grid-template-columns: 1fr;
     }
 }
