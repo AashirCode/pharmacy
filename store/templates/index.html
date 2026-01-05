@@ -18,8 +18,8 @@
         <li><a href="#" class="active">Medicines</a></li>
         <li><a href="#">About</a></li>
         <li><a href="/add_product">Add Product</a></li>
+        <li><a href="{% url 'cart' %}">Cart</a></li>
         {% if user.is_authenticated %}
-            <li><a href="{% url 'cart' %}">Cart</a></li>
             <li>
                 <form method="POST" action="{% url 'logout' %}">
                     {% csrf_token %}
@@ -91,8 +91,10 @@ for (var i = 0; i < updateBtns.length; i++) {
         var action = this.dataset.action
 
         var user = "{{ request.user }}"
+        // updateUserOrder(productId, action)
         if (user === "AnonymousUser") {
-            window.location.href = "/login/"
+            // window.location.href = "/login/"
+            updateUserOrderanon(productId, action)
         } else {
             updateUserOrder(productId, action)
         }
@@ -115,6 +117,25 @@ function updateUserOrder(productId, action) {
     .then(data => {
         location.reload()
     })
+    
+}
+function updateUserOrderanon(productId, action) {
+    fetch('/update_item_anon/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',
+        },
+        body: JSON.stringify({
+            productid: productId,
+            action: action
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        location.reload()
+    })
+    
 }
 </script>
 

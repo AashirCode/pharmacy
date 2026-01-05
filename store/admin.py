@@ -5,4 +5,7 @@ from .models import *
 admin.site.register(Medicines)
 admin.site.register(Order)
 admin.site.register(OrderItem)
+admin.site.register(OrderAnon)
+admin.site.register(OrderItemAnon)
+
 

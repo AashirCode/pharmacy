@@ -44,3 +44,34 @@ class OrderItem(models.Model):
     def get_total(self):
         total = self.quantity * self.product.price
         return total
+
+class OrderAnon(models.Model):
+    date = models.DateTimeField(auto_now_add=True)
+    complete = models.BooleanField(default=False)
+    transaction_id = models.CharField(max_length=100)
+
+    def __str__(self):
+        return str(self.id)
+
+    @property
+    def get_cart_items(self):
+        orderitems = self.orderitemanon_set.all()
+        total = sum([item.quantity for item in orderitems])
+        return total
+
+    @property
+    def get_cart_total(self):
+        orderitems = self.orderitemanon_set.all()
+        total = sum([item.get_total for item in orderitems])
+        return total
+    
+class OrderItemAnon(models.Model):
+    order = models.ForeignKey(OrderAnon, on_delete=models.SET_NULL, null=True, blank=True)
+    product = models.ForeignKey(Medicines, on_delete=models.SET_NULL, null=True, blank=True)
+    quantity = models.IntegerField(default=0)
+    date = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def get_total(self):
+        total = self.quantity * self.product.price
+        return total
