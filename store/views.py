@@ -87,7 +87,7 @@ def cart(request):
     return render(request, 'cart.html', context)
 
 # def cart(request):
-#     order, created = Order.objects.get_or_create(customer="ANON", complete=False)
+#     order, created = Order.objects.get_or_create(customer = "Anon", complete=False)
     
 #     items = order.orderitem_set.all()
 
