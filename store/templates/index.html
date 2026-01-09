@@ -58,15 +58,7 @@
                  Add To Cart
             </button>
 
-            <button data-product="{{ medcine.id }}" data-action="add"
-                class="btn btn-primary update-cart">
-                ➕ Add
-            </button>
-
-            <button data-product="{{ medcine.id }}" data-action="remove"
-                class="btn btn-warning update-cart">
-                ➖ Remove
-            </button>
+            
 
             <a href="{% url 'update_prod' medcine.id %}" class="btn btn-secondary">
                 update
@@ -82,7 +74,7 @@
 {% endfor %}
 </div>
 
-<script>
+<!-- <script>
 var updateBtns = document.getElementsByClassName('update-cart')
 
 for (var i = 0; i < updateBtns.length; i++) {
@@ -136,6 +128,37 @@ function updateUserOrderanon(productId, action) {
         location.reload()
     })
     
+}
+</script> -->
+<!-- ======================= chat gpt updated code ===================== -->
+<script>
+var updateBtns = document.getElementsByClassName('update-cart')
+
+for (var i = 0; i < updateBtns.length; i++) {
+    updateBtns[i].addEventListener('click', function () {
+        var productId = this.dataset.product
+        var action = this.dataset.action
+
+        updateUserOrder(productId, action)
+    })
+}
+
+function updateUserOrder(productId, action) {
+    fetch('/update_item/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',
+        },
+        body: JSON.stringify({
+            productid: productId,
+            action: action
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        location.reload()
+    })
 }
 </script>
 

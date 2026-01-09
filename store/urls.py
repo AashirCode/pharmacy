@@ -30,6 +30,6 @@ urlpatterns = [
     path('delete/<pk>', views.delete, name='delete'),
     path('cart/', views.cart, name='cart'),    
     path('update_item/', views.updateItem, name='update_item'),
-    path('update_item_anon/', views.updateItemanon, name='update_item_anon'),
+    # path('update_item_anon/', views.updateItemanon, name='update_item_anon'),
 ]
 
