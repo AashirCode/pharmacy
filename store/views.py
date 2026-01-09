@@ -3,16 +3,21 @@ from .models import *
 import os
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required,user_passes_test
 from django.http import JsonResponse
 import json
 
 # Create your views here.
+def isadmin(user):
+    return user.is_superuser
+
 def home(request):
     med = Medicines.objects.all()
     context = {'medicines':med}
     return render(request,"index.html", context)
 
-    
+@login_required(login_url= 'login')
+@user_passes_test(isadmin)
 def add_prod(request):
     if request.method == 'POST':
         name = request.POST.get('m_name')
@@ -75,32 +80,32 @@ def register(request):
     return render(request, 'registration/signup.html', context)
 
 # def cart(request):
-#     if request.user.is_authenticated:
-#         customer = request.user
-#         order, created = Order.objects.get_or_create(
-#             customer=customer, 
-#             complete=False
-#             )
-#         items = order.orderitem_set.all()
-#     else:
-#         items = []
-#         order = {'get_cart_total': 0, 'get_cart_items': 0}
-#         cart = request.session.get('cart', {})
+    if request.user.is_authenticated:
+        customer = request.user
+        order, created = Order.objects.get_or_create(
+            customer=customer, 
+            complete=False
+            )
+        items = order.orderitem_set.all()
+    else:
+        items = []
+        order = {'get_cart_total': 0, 'get_cart_items': 0}
+        cart = request.session.get('cart', {})
 
-#         for i in cart:
-#             product = Medicines.objects.get(id=i)
-#             total = product.price * cart[i]['quantity']
+        for i in cart:
+            product = Medicines.objects.get(id=i)
+            total = product.price * cart[i]['quantity']
 
-#             order['get_cart_total'] += total
-#             order['get_cart_items'] += cart[i]['quantity']
-#             items.append({
-#                 'product': product,
-#                 'quantity': cart[i]['quantity'],
-#                 'get_total': total
-#             })
+            order['get_cart_total'] += total
+            order['get_cart_items'] += cart[i]['quantity']
+            items.append({
+                'product': product,
+                'quantity': cart[i]['quantity'],
+                'get_total': total
+            })
 
-#     context = {'items': items, 'order': order}
-#     return render(request, 'cart.html', context)
+    context = {'items': items, 'order': order}
+    return render(request, 'cart.html', context)
 def cart(request):
     if request.user.is_authenticated:
         customer = request.user
@@ -132,13 +137,18 @@ def cart(request):
                     'get_total': total
                 })
             except Medicines.DoesNotExist:
-                # skip if the product ID does not exist in DB
                 continue
 
     context = {'items': items, 'order': order}
     return render(request, 'cart.html', context)
 
 
+def deletecart(request , pk):
+    if request.user.is_authenticated:
+        customer = request.user
+        Order.objects.filter(customer= customer ).delete()
+
+    return render(request, 'cart.html' )
 
 # def updateItem(request):
 #     data = json.loads(request.body)
