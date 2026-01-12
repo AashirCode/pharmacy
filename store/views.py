@@ -224,58 +224,58 @@ def deletecart(request , pk):
 #     return JsonResponse("item was added", safe=False)
 
 # ===================== Chat gpt Updated Code =====================
-def updateItem(request):
-    data = json.loads(request.body)
-    productId = str(data['productid'])
-    action = data['action']
+# def updateItem(request):
+#     data = json.loads(request.body)
+#     productId = str(data['productid'])
+#     action = data['action']
 
-    # ======================
-    # LOGIN USER
-    # ======================
-    if request.user.is_authenticated:
-        customer = request.user
-        product = Medicines.objects.get(id=productId)
+#     # ======================
+#     # LOGIN USER
+#     # ======================
+#     if request.user.is_authenticated:
+#         customer = request.user
+#         product = Medicines.objects.get(id=productId)
 
-        order, created = Order.objects.get_or_create(
-            customer=customer,
-            complete=False
-        )
-        orderItem, created = OrderItem.objects.get_or_create(
-            order=order,
-            product=product
-        )
+#         order, created = Order.objects.get_or_create(
+#             customer=customer,
+#             complete=False
+#         )
+#         orderItem, created = OrderItem.objects.get_or_create(
+#             order=order,
+#             product=product
+#         )
 
-        if action == 'add':
-            orderItem.quantity += 1
-        elif action == 'remove':
-            orderItem.quantity -= 1
+#         if action == 'add':
+#             orderItem.quantity += 1
+#         elif action == 'remove':
+#             orderItem.quantity -= 1
 
-        orderItem.save()
+#         orderItem.save()
 
-        if orderItem.quantity <= 0:
-            orderItem.delete()
+#         if orderItem.quantity <= 0:
+#             orderItem.delete()
 
-    # ======================
-    # ANONYMOUS USER
-    # ======================
-    else:
-        cart = request.session.get('cart', {})
+#     # ======================
+#     # ANONYMOUS USER
+#     # ======================
+#     else:
+#         cart = request.session.get('cart', {})
 
-        if action == 'add':
-            if productId in cart:
-                cart[productId]['quantity'] += 1
-            else:
-                cart[productId] = {'quantity': 1}
+#         if action == 'add':
+#             if productId in cart:
+#                 cart[productId]['quantity'] += 1
+#             else:
+#                 cart[productId] = {'quantity': 1}
 
-        elif action == 'remove':
-            if productId in cart:
-                cart[productId]['quantity'] -= 1
-                if cart[productId]['quantity'] <= 0:
-                    del cart[productId]
+#         elif action == 'remove':
+#             if productId in cart:
+#                 cart[productId]['quantity'] -= 1
+#                 if cart[productId]['quantity'] <= 0:
+#                     del cart[productId]
 
-        request.session['cart'] = cart
+#         request.session['cart'] = cart
 
-    return JsonResponse("Item updated", safe=False)
+#     return JsonResponse("Item updated", safe=False)
 
 # def cart(request):
 #     if request.user.is_authenticated:
@@ -306,3 +306,77 @@ def updateItem(request):
 
 #     return render(request, 'cart.html', 
 #                   {'items': items, 'order': order})
+
+def updateItem(request):
+    data = json.loads(request.body)
+    productId = str(data['productid'])
+    action = data['action']
+
+    # ======================
+    # LOGIN USER
+    # ======================
+    if request.user.is_authenticated:
+        customer = request.user
+        order, created = Order.objects.get_or_create(
+            customer=customer,
+            complete=False
+        )
+
+        # 🔥 DELETE ALL CART
+        if action == 'clear':
+            order.orderitem_set.all().delete()
+            return JsonResponse("Cart cleared", safe=False)
+
+        product = Medicines.objects.get(id=productId)
+        orderItem, created = OrderItem.objects.get_or_create(
+            order=order,
+            product=product
+        )
+
+        if action == 'add':
+            orderItem.quantity += 1
+            orderItem.save()
+
+        elif action == 'remove':
+            orderItem.quantity -= 1
+            if orderItem.quantity <= 0:
+                orderItem.delete()
+            else:
+                orderItem.save()
+
+        # 🗑 DELETE SINGLE ITEM
+        elif action == 'delete':
+            orderItem.delete()
+
+    # ======================
+    # ANONYMOUS USER
+    # ======================
+    else:
+        cart = request.session.get('cart', {})
+
+        # 🔥 DELETE ALL
+        if action == 'clear':
+            cart = {}
+            request.session['cart'] = cart
+            return JsonResponse("Cart cleared", safe=False)
+
+        if action == 'add':
+            if productId in cart:
+                cart[productId]['quantity'] += 1
+            else:
+                cart[productId] = {'quantity': 1}
+
+        elif action == 'remove':
+            if productId in cart:
+                cart[productId]['quantity'] -= 1
+                if cart[productId]['quantity'] <= 0:
+                    del cart[productId]
+
+        # 🗑 DELETE SINGLE ITEM
+        elif action == 'delete':
+            if productId in cart:
+                del cart[productId]
+
+        request.session['cart'] = cart
+
+    return JsonResponse("Item updated", safe=False)
